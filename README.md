@@ -1,7 +1,7 @@
 # archquick
 
 archquick is a set of scripts to facilitate the process of quickly installing
-Arch Linux in new systems.
+Arch Linux.
 
 ## Quick start
 
