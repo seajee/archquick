@@ -38,7 +38,7 @@ else
 fi
 
 # Select disk to be partitioned
-echo "[INFO] Printing available disks"
+echo -e "[INFO] Printing available disks\n"
 fdisk -l
 
 read -p "Enter installation disk (${disk}): " input
