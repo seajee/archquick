@@ -5,6 +5,8 @@ timezone="Europe/Amsterdam"
 hostname="arch"
 password=""
 
+echoerr() { cat <<< "$@" 1>&2; }
+
 # Set the time zone
 read -p "Enter timezone (${timezone}): " input
 if [[ -n "$input" ]]; then
