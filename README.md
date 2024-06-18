@@ -3,7 +3,7 @@
 archquick is a set of scripts to facilitate the process of quickly installing
 Arch Linux in new systems.
 
-# Quick start
+## Quick start
 
 To use the scripts run the following on a live Arch Linux environment:
 
