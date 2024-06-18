@@ -11,9 +11,6 @@
 platform="bios"
 input=""
 disk="/dev/sda"
-timezone="Europe/Amsterdam"
-hostname="arch"
-password=""
 
 echoerr() { cat <<< "$@" 1>&2; }
 

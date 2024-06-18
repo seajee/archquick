@@ -22,9 +22,9 @@ hwclock --systohc
 
 # Localization
 echo "[INFO] Setting locale to en_US"
-echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+sed -i -e 's|#en_US.UTF-8 UTF-8|en_US.UTF-8 UTF-8|' /etc/locale.gen
 locale-gen &>/dev/null
-echo "LANG=en_US.UTF-8" >> /etc/locale.conf
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
 # Network configuration
 read -p "Enter a valid hostname (${hostname}): " input
