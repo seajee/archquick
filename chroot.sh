@@ -8,7 +8,7 @@ password=""
 echoerr() { cat <<< "$@" 1>&2; }
 
 # Set the time zone
-read -p "Enter timezone (${timezone}): " input
+read -p "Enter time zone (${timezone}): " input
 if [[ -n "$input" ]]; then
     timezone="$input"
 fi
