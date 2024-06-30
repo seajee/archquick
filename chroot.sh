@@ -18,7 +18,7 @@ if [[ ! -f "/usr/share/zoneinfo/${timezone}" ]]; then
     exit 5
 fi
 
-echo "[INFO] Settings ${timezone} as the time zone"
+echo "[INFO] Setting ${timezone} as the time zone"
 ln -sf "/usr/share/zoneinfo/${timezone}" /etc/localtime
 hwclock --systohc
 
@@ -33,6 +33,8 @@ read -p "Enter a valid hostname (${hostname}): " input
 if [[ -n "$input" ]]; then
     hostname="$input"
 fi
+
+echo "[INFO] Setting ${hostname} as the hostname"
 echo "$hostname" > /etc/hostname
 
 echo "[INFO] Enabling NetworkManager to start at boot"
