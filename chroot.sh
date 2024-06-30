@@ -33,6 +33,7 @@ read -p "Enter a valid hostname (${hostname}): " input
 if [[ -n "$input" ]]; then
     hostname="$input"
 fi
+echo "$hostname" > /etc/hostname
 
 echo "[INFO] Enabling NetworkManager to start at boot"
 systemctl enable NetworkManager &>/dev/null
