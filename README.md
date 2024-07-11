@@ -9,7 +9,7 @@ To use the scripts run the following on a live Arch Linux environment:
 
 ```bash
 $ pacman -Sy git
-$ git clone https://github.com/seajee/archquick
+$ git clone --depth 1 https://github.com/seajee/archquick
 $ cd archquick
 $ ./install.sh
 ```
