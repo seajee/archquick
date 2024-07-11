@@ -13,3 +13,8 @@ $ git clone https://github.com/seajee/archquick
 $ cd archquick
 $ ./install.sh
 ```
+
+## Post-install
+
+The suggested post-install configuration steps are:
+- Configure the keymap for ttys via /etc/vconsole.conf
