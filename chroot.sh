@@ -17,12 +17,10 @@ while
         continue
     fi
 
-    if [[ -n "$input" ]]; then
-        timezone="$input"
-    fi
-
     if [[ ! -f "/usr/share/zoneinfo/${timezone}" ]]; then
         echoerr "[ERROR] The selected time zone does not exist"
+    else
+        timezone="$input"
     fi
 
     [[ ! -f "/usr/share/zoneinfo/${timezone}" ]]
