@@ -83,10 +83,6 @@ echo w # Write changes
 
 # TODO: Check if fdisk terminated succesfully
 
-# Swap file
-echo "[INFO] Creating the swap file"
-mkswap -U clear --size 4G --file /mnt/swapfile &>/dev/null
-
 # Format the partitions
 echo "[INFO] Formatting the partitions"
 mkfs.fat -F 32 "${disk}1" &>/dev/null
@@ -98,6 +94,10 @@ mkfs.ext4 "${disk}2" &>/dev/null
 echo "[INFO] Mounting the file systems"
 mount "${disk}2" /mnt
 mount --mkdir "${disk}1" /mnt/boot
+
+# Swap file
+echo "[INFO] Creating the swap file"
+mkswap -U clear --size 4G --file /mnt/swapfile &>/dev/null
 swapon /mnt/swapfile
 
 # TODO: Select the mirrors for faster download speeds
@@ -107,7 +107,8 @@ echo "[INFO] Installing essential packages"
 pacstrap -K /mnt base linux linux-firmware \
     intel-ucode amd-ucode \
     networkmanager \
-    grub efibootmgr
+    grub efibootmgr \
+    less
 
 # Generate the fstab file
 echo "[INFO] Generating fstab file"
