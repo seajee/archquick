@@ -6,7 +6,7 @@
 # - Add support for BIOS platform
 # - Add more filesystem options (defaults to ext4)
 # - Make script recoverable from errors (save script stage)
-# - Add support for custom localization configuration
+# - Add support for custom localization configuration (defaults to en_US.UTF-8)
 
 platform="bios"
 input=""
@@ -14,9 +14,9 @@ disk="/dev/sda"
 
 echoerr() { cat <<< "$@" 1>&2; }
 
-# Check is script is being run as root
+# Check if script is being run as root
 if [[ $(id -u) -ne 0 ]]; then
-    echoerr "[ERROR] Please run this script as root or using sudo"
+    echoerr "[ERROR] This script needs root permissions to be executed"
     exit 1
 fi
 
@@ -51,60 +51,54 @@ if [[ ! -b "$disk" ]]; then
     exit 4
 fi
 
-# Partition the disk with the following layout:
-# | Mount point | Partition Type        | Size                    |
-# |-------------|-----------------------|-------------------------|
-# | /boot       | EFI system partition  | 1 GiB                   |
-# | [SWAP]      | Linux swap            | 4 GiB                   |
-# | /           | Linux x86-64 root (/) | Remainder of the device |
-echo "[INFO] Partitioning the disk"
+# Partition the disk
+echo "[INFO] Partitioning the disk with the following layout:"
+echo "    | Mount point | Partition Type        | Size                    |"
+echo "    |-------------|-----------------------|-------------------------|"
+echo "    | /boot       | EFI system partition  | 1 GiB                   |"
+echo "    | /swapfile   | Linux swap            | 4 GiB                   |"
+echo "    | /           | Linux x86-64 root (/) | Remainder of the device |"
 (
 echo g # Create a new empty GPT partition table
 
 # EFI system partition
 echo n       # Add a new partition
 echo 1       # Partition number
-echo         # First sector (accept default: 2048)
+echo         # First sector (accept default)
 echo "+1GiB" # Last sector
 echo t       # Change partition type
-echo "uefi"  # "EFI system partition" type
-
-# Swap partition
-echo n       # Add a new partition
-echo 2       # Partition number
-echo         # First sector (accept default)
-echo "+4GiB" # Last sector
-echo t       # Change partition type
-echo 2       # Select partition
-echo "swap"  # "Linux swap partition" type
+echo "uefi"  # "EFI system" partition type
 
 # Root partition
 echo n       # Add a new partition
-echo 3       # Partition number
+echo 2       # Partition number
 echo         # First sector (accept default)
 echo         # Last sector (accept default)
 echo t       # Change partition type
-echo 3       # Select partition
-echo 23      # "Linux x86-64 root (/) Linux" partition type
+echo 2       # Select partition
+echo 23      # "Linux root (x86-64)" partition type
 
 echo w # Write changes
 ) | fdisk "$disk" &>/dev/null
 
 # TODO: Check if fdisk terminated succesfully
 
+# Swap file
+echo "[INFO] Creating the swap file"
+mkswap -U clear --size 4G --file /mnt/swapfile &>/dev/null
+
 # Format the partitions
 echo "[INFO] Formatting the partitions"
-mkfs.ext4 "${disk}3" &>/dev/null
-mkswap "${disk}2" &>/dev/null
 mkfs.fat -F 32 "${disk}1" &>/dev/null
+mkfs.ext4 "${disk}2" &>/dev/null
 
 # TODO: Check if formatting the partitions went correctly
 
 # Mount the file systems
 echo "[INFO] Mounting the file systems"
-mount "${disk}3" /mnt
+mount "${disk}2" /mnt
 mount --mkdir "${disk}1" /mnt/boot
-swapon "${disk}2"
+swapon /mnt/swapfile
 
 # TODO: Select the mirrors for faster download speeds
 
@@ -115,7 +109,7 @@ pacstrap -K /mnt base linux linux-firmware \
     networkmanager \
     grub efibootmgr
 
-# Generate an fstab file
+# Generate the fstab file
 echo "[INFO] Generating fstab file"
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -127,6 +121,7 @@ arch-chroot /mnt bash /chroot.sh
 
 # Unmount partitions
 umount -R /mnt
+swapoff -a
 
 # Tell the user that it's ok to reboot now
 echo "[INFO] Now you also can say \"I use Arch, BTW\". Reboot when you're ready"
