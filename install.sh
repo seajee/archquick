@@ -121,8 +121,8 @@ echo "[INFO] Changing root into the new system"
 arch-chroot /mnt bash /chroot.sh
 
 # Unmount partitions
-umount -R /mnt
 swapoff -a
+umount -R /mnt
 
 # Tell the user that it's ok to reboot now
 echo "[INFO] Now you also can say \"I use Arch, BTW\". Reboot when you're ready"
