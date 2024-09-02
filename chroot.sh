@@ -8,22 +8,21 @@ password=""
 echoerr() { cat <<< "$@" 1>&2; }
 
 # Set the time zone
-while
+while true; do
     echo "[INFO] Time zone configuration."
     read -p "Enter time zone (${timezone}): " input
 
-    if [[ -n "$input" ]]; then
+    if [[ -z "$input" ]]; then
         break
     fi
 
-    if [[ ! -f "/usr/share/zoneinfo/${input}" ]]; then
-        echoerr "[ERROR] The selected time zone does not exist"
-    else
+    if [[ -f "/usr/share/zoneinfo/${input}" ]]; then
         timezone="$input"
+        break
+    else
+        echoerr "[ERROR] The selected time zone does not exist"
     fi
-
-    [[ ! -f "/usr/share/zoneinfo/${input}" ]]
-do true; done
+done
 
 echo "[INFO] Setting ${timezone} as the time zone"
 ln -sf "/usr/share/zoneinfo/${timezone}" /etc/localtime
