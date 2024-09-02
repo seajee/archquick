@@ -96,9 +96,14 @@ mount "${disk}2" /mnt
 mount --mkdir "${disk}1" /mnt/boot
 
 # Swap file
-echo "[INFO] Creating the swap file"
-mkswap -U clear --size 4G --file /mnt/swapfile &>/dev/null
-swapon /mnt/swapfile
+echo "[INFO] Swapfile configuration"
+read -p "Enable swap? [Y/n] " input
+
+if [[ "$input" != [Nn]* ]]; then
+    echo "[INFO] Creating the swap file"
+    mkswap -U clear --size 4G --file /mnt/swapfile &>/dev/null
+    swapon /mnt/swapfile
+fi
 
 # TODO: Select the mirrors for faster download speeds
 
