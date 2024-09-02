@@ -13,7 +13,7 @@ while
     read -p "Enter time zone (${timezone}): " input
 
     if [[ -n "$input" ]]; then
-        input="$timezone"
+        break
     fi
 
     if [[ ! -f "/usr/share/zoneinfo/${input}" ]]; then
