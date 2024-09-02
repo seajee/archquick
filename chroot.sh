@@ -12,6 +12,10 @@ while
     echo "[INFO] Time zone configuration."
     read -p "Enter time zone (${timezone}): " input
 
+    if [[ -n "$input" ]]; then
+        input="$timezone"
+    fi
+
     if [[ ! -f "/usr/share/zoneinfo/${input}" ]]; then
         echoerr "[ERROR] The selected time zone does not exist"
     else
