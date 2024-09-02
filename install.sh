@@ -107,8 +107,7 @@ echo "[INFO] Installing essential packages"
 pacstrap -K /mnt base linux linux-firmware \
     intel-ucode amd-ucode \
     networkmanager \
-    grub efibootmgr \
-    less
+    grub efibootmgr
 
 # Generate the fstab file
 echo "[INFO] Generating fstab file"

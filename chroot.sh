@@ -9,13 +9,8 @@ echoerr() { cat <<< "$@" 1>&2; }
 
 # Set the time zone
 while
-    echo "[INFO] Time zone configuration. Type \"list\" to list time zones"
+    echo "[INFO] Time zone configuration."
     read -p "Enter time zone (${timezone}): " input
-
-    if [[ "$input" == "list" ]]; then
-        awk '/^Z/ { print $2 }; /^L/ { print $3 }' /usr/share/zoneinfo/tzdata.zi | sort | less
-        continue
-    fi
 
     if [[ ! -f "/usr/share/zoneinfo/${input}" ]]; then
         echoerr "[ERROR] The selected time zone does not exist"
